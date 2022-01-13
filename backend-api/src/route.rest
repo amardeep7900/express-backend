@@ -1,0 +1,97 @@
+GET http://localhost:3000/post
+
+###
+POST http://localhost:3000/post
+Content-Type: application/json
+
+{
+"title":"all are good and awesome and fine,,",
+
+"name":"amardeep kumar ",
+"age":20
+
+
+  
+}
+###
+GET http://localhost:3000/post/61ced1810f61165db3bc9bc6
+
+###
+
+DELETE http://localhost:3000/post/61ceb69ad5ae134593dc847a554
+
+###
+PATCH  http://localhost:3000/post/61ceaef861ba79edc78154a8
+Content-Type: application/json
+
+{
+  "title":"great"
+  
+  
+}
+
+###
+POST http://localhost:3000/signup
+Content-Type: application/json
+
+
+{
+ "name":"good name",
+ "email":"amar402@gmail.com",
+"password":"good5422"
+
+
+
+
+
+
+}
+
+###
+POST http://localhost:3000/login
+Content-Type: application/json
+
+
+{
+
+"email":"amar402@gmail.com",
+"password":"good5422"
+  
+}
+
+###
+GET http://localhost:3000/get
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxZGQxNTdlNjQzNjUxZDdjNWFkYmM3YSIsImlhdCI6MTY0MTg3ODk1OCwiZXhwIjoxNjQxOTE0OTU4fQ.sWHEfcZesBCQGLkjNnCovR_h51Kqms1evz-e3BMrPBU
+
+
+###
+GET http://localhost:3000/post
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxZDZhMmMxMzdhODA4Y2YxZmVlMmM4OSIsImlhdCI6MTY0MTQ1NjMyMiwiZXhwIjoxNjQxNDkyMzIyfQ.C_nMnWXPbLGj9ymhbKRa_xmLjp4wbWvFHh1IBB9L_Xw
+
+###
+
+PATCH http://localhost:3000/changepass
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxZGMyMGExMWI3YjU5YTQ1OWNlM2QyYiIsImlhdCI6MTY0MTgxODY5OCwiZXhwIjoxNjQxODU0Njk4fQ.fbLzkktRFU8bWOLjU9AIlhRaiFeYhR1QuTVOEJyM-EM
+Content-Type: application/json
+
+{
+  "currentpassword":"good12345",
+  "password":"amar123456"
+}
+
+###
+POST http://localhost:3000/forgot
+Content-Type: application/json
+
+{
+  "email":"amar402@gmail.com"
+}
+
+###
+PATCH http://localhost:3000/reset/ec088291563945d48dfd85b280c6c33d2086800ce9c7016f295fc81d1f7bac00
+Content-Type: application/json
+
+{
+  "password":"amar1234"
+}
+

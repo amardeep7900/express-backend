@@ -13,7 +13,7 @@ async function login({ email, password }) {
   const User = await user.findOne({ email }).select("+password");
   if (!User || !(await User.correctPassword(password, User.password))) {
     return ErrorHandler.throwError({
-      message: "please provide valid email and password",
+      message: "please provide valid password",
       code: 404,
     });
   }

@@ -1,22 +1,20 @@
 const user = require("../../infra/model/schema/user");
-const jwt = require("jsonwebtoken");
-const Asynchandler=require ('../../infra/utlis/asynchandler')
+const ErrorHandler = require("../../infra/utils/errorHandler");
+const Encryption = require("../../infra/utils/encryption");
 
-const signtoken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN,
-  });
-};
-
-exports.signup = Asynchandler(async (req, res, next) => {
-  
-    const newuser = await user.create({
-      name: req.body.name,
-      email: req.body.email,
-      password: req.body.password,
-      passwordchangedAt:req.body.passwordchangedAt
+async function signup({ name, email, password }) {
+  const emailexist = await user.findOne({ email });
+  if (emailexist) {
+    return ErrorHandler.throwError({
+      message: "email already exist please use another email to signup",
     });
-    const token = signtoken(newuser._id);
-    res.json({ status: "sucess", token, data: newuser });
-   
-});
+  }
+  const newuser = new user({ name, email, password });
+
+  await newuser.save();
+
+  const token = Encryption.signToken(newuser._id);
+  return { token, newuser };
+}
+
+module.exports = signup;

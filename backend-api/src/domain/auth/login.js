@@ -1,28 +1,25 @@
 const user = require("../../infra/model/schema/user");
-const jwt = require("jsonwebtoken");
-const AppError = require("../../infra/utlis/apperror");
+const ErrorHandler = require("../../infra/utils/errorHandler");
+const Encryption = require("../../infra/utils/encryption");
 
-const signtoken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN,
-  });
-};
-
-exports.login = async (req, res, next) => {
-  const { email, password } = req.body;
-
+async function login({ email, password }) {
   if (!email || !password) {
-    return next(new AppError("please provide valid email and password", 404));
-    
+    return ErrorHandler.throwError({
+      message: "please provide valid email and password",
+      code: 400,
+    });
   }
 
   const User = await user.findOne({ email }).select("+password");
   if (!User || !(await User.correctPassword(password, User.password))) {
-
-    return next(new AppError('please provide valid email and password',404))
-  
+    return ErrorHandler.throwError({
+      message: "please provide valid email and password",
+      code: 404,
+    });
   }
 
-  const token = signtoken(User._id);
-  res.json({ status: "sucess", token,User });
-};
+  const token = Encryption.signToken(User._id);
+  return { token, User };
+}
+
+module.exports = login;

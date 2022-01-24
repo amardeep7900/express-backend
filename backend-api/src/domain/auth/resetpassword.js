@@ -1,35 +1,28 @@
 const crypto = require("crypto");
 const User = require("../../infra/model/schema/user");
-const AppError = require("../../infra/utlis/apperror");
-const jwt = require("jsonwebtoken");
+const ErrorHandler = require("../../infra/utils/errorHandler");
+const Encryption= require('../../infra/utils/encryption')
 
-const signtoken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN,
-  });
-};
 
-exports.resetpass = async (req, res, next) => {
+async function resetPassword(Token, { password }) {
   //get user based on the token
-  const hashedToken = crypto
-    .createHash("sha256")
-    .update(req.params.token)
-    .digest("hex");
+  const hashedToken = crypto.createHash("sha256").update(Token).digest("hex");
 
   const user = await User.findOne({
-    passwordresettoken: hashedToken,
-    passwordresetexpires: { $gt: Date.now() },
+    passwordResetToken: hashedToken,
+    passwordResetExpires: { $gt: Date.now() },
   });
   //if token has not expired,set the new password
   if (!user) {
-    return next(new AppError("token is invalid or expired", 400));
+    return ErrorHandler.throwError({ message: "token is invalid or expired", code: 400 });
   }
-  user.password = req.body.password;
-  user.passwordresettoken = undefined;
-  user.passwordresetexpires = undefined;
+  user.password = password;
+  user.passwordResetToken = undefined;
+  user.passwordResetExpires = undefined;
   await user.save();
 
   //log the user and send jwt
-  const token = signtoken(user._id);
-  res.json({ status: "successs", token, user });
-};
+  const token = Encryption.signToken(user._id);
+  return { token, user };
+}
+module.exports = resetPassword;

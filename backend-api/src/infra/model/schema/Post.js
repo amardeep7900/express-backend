@@ -3,11 +3,10 @@ const mongoose= require('mongoose');
 
   title:{
     type:String,
-    required:true
+  
   },
   name:{
     type:String,
-    required:true
   },
   age:Number,
   date:{

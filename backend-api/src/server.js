@@ -1,5 +1,4 @@
 const express = require("express");
-const mongoose = require("mongoose");
 require("dotenv/config");
 const bodyparser = require("body-parser");
 const { ApolloServer } = require("apollo-server-express");
@@ -7,6 +6,7 @@ const globalerror = require("./infra/utils/errorcontroller");
 const ErrorHandler = require("./infra/utils/errorHandler");
 const GraphQL = require("./interface/graphql");
 const authrouter = require("./interface/rest/auth-module/auth.route");
+require("./infra/model/index");
 
 const app = express();
 
@@ -34,16 +34,6 @@ async function startserver() {
   });
 
   app.use(globalerror);
-
-  mongoose
-    .connect(process.env.DB_CONNECTION)
-
-    .then(() => {
-      console.log("mongoose connected");
-    })
-    .catch(() => {
-      console.error("not connected");
-    });
 
   app.listen(3000, () => console.log("server is running"));
 }

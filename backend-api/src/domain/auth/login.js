@@ -14,7 +14,7 @@ async function login({ email, password }) {
   const correctPass = users.comparePassword(password);
   if (!correctPass) {
     return ErrorHandler.throwError({
-      message: "please enter valid password",
+      message: " enter valid password",
       code: 400,
     });
   }

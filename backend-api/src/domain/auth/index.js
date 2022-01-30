@@ -4,6 +4,5 @@ module.exports={
   changePassword:require('./changePassword'),
   forgotPassword:require('./forgotPassword'),
   resetPassword:require('./resetPassword'),
-  verifyUserEmail:require('./verifyUserEmail')
 
 }

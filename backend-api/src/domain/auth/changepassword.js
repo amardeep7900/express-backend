@@ -14,7 +14,6 @@ async function changePassword({ email, password, newPassword }) {
     });
   }
 
-
   user.password = newPassword;
   await user.save();
   return {

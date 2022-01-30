@@ -40,7 +40,7 @@ router.route("/login").post(
 );
 router.route("/changepass").patch(
   validate(validation.changepass),
-  AsyncHandler(async (req, res, next) => {
+  AsyncHandler(async (req, res) => {
     const data = await Auth.changePassword({
       email: req.body.email,
       password: req.body.password,
@@ -54,7 +54,7 @@ router.route("/changepass").patch(
   })
 );
 router.route("/forgot").post(
-  AsyncHandler(async (req, res, next) => {
+  AsyncHandler(async (req, res) => {
     const data = await Auth.forgotPassword(
       { email: req.body.email },
       req.protocol
@@ -66,17 +66,8 @@ router.route("/forgot").post(
     return ResponseHandler(res, response);
   })
 );
-router.route("/verify").post(
-  AsyncHandler(async (req, res, next) => {
-    const data = await Auth.verifyUserEmail({
-      email: req.body.email,
-      verificationToken: req.body.verificationToken,
-    },req.protocol);
-    res.send(data);
-  })
-);
 router.route("/reset/:Token").patch(
-  AsyncHandler(async (req, res, next) => {
+  AsyncHandler(async (req, res) => {
     const data = await Auth.resetPassword(req.params.Token, {
       password: req.body.password,
     });
@@ -87,10 +78,19 @@ router.route("/reset/:Token").patch(
     return ResponseHandler(res, response);
   })
 );
-router.route("/getall").get(AsyncHandler(Restcontroller.getall));
+router.route("/getall").get(
+  AsyncHandler(async (req, res) => {
+    const data = await Restcontroller.getall();
+    const response = {};
+    response.success = true;
+    response.statusCode = 200;
+    response.data = data;
+    return ResponseHandler(res, response);
+  })
+);
 router.route("/create").post(
   validate(validation.create),
-  AsyncHandler(async (req, res, next) => {
+  AsyncHandler(async (req, res) => {
     const data = await Restcontroller.create({
       title: req.body.title,
       name: req.body.name,
@@ -104,7 +104,7 @@ router.route("/create").post(
   })
 );
 router.route("/getone/:postId").get(
-  AsyncHandler(async (req, res, next) => {
+  AsyncHandler(async (req, res) => {
     const data = await Restcontroller.getuser(req.params.postId);
 
     const response = {};
@@ -115,7 +115,7 @@ router.route("/getone/:postId").get(
   })
 );
 router.route("/delete/:postId").delete(
-  AsyncHandler(async (req, res, next) => {
+  AsyncHandler(async (req, res) => {
     const data = await Restcontroller.deleteted(req.params.postId);
 
     const response = {};
@@ -126,7 +126,7 @@ router.route("/delete/:postId").delete(
   })
 );
 router.route("/update/:postId").patch(
-  AsyncHandler(async (req, res, next) => {
+  AsyncHandler(async (req, res) => {
     const data = await Restcontroller.update(req.params.postId, {
       title: req.body.title,
     });

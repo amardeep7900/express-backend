@@ -13,8 +13,7 @@ const userschema = new mongoose.Schema({
   password: {
     type: String,
   },
-  verified: { type: Boolean, required: false },
-  verificationToken: { type: String },
+  
 
   passwordRestToken: String,
   passwordResetExpires: Date,

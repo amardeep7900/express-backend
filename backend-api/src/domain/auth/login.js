@@ -10,17 +10,11 @@ async function login({ email, password }) {
       code: 400,
     });
   }
-  if (!users.verified) {
-    return ErrorHandler.throwError({
-      message: "verify your email first",
-      code: 400,
-    });
-  }
 
   const correctPass = users.comparePassword(password);
   if (!correctPass) {
     return ErrorHandler.throwError({
-      message: "enter valid password",
+      message: "please enter valid password",
       code: 400,
     });
   }

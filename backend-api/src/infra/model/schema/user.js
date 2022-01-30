@@ -13,6 +13,8 @@ const userschema = new mongoose.Schema({
   password: {
     type: String,
   },
+  verified: { type: Boolean, required: false },
+  verificationToken: { type: String },
 
   passwordRestToken: String,
   passwordResetExpires: Date,
@@ -22,11 +24,8 @@ userschema.pre("save", async function (next) {
   next();
 });
 
-userschema.methods.correctPassword = async function (
-  candidatepassword,
-  userpassword
-) {
-  return await bcrypt.compare(candidatepassword, userpassword);
+userschema.methods.comparePassword = function (candidatePassword) {
+  return bcrypt.compareSync(candidatePassword, this.password);
 };
 
 userschema.methods.createPassrestToken = function () {

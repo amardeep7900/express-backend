@@ -22,7 +22,7 @@ const create = {
   }).unknown(),
 };
 const changepass= {
-  headers:Joi.object({
+  body:Joi.object({
     email:Joi.string().email().required(),
     password:Joi.string().required(),
     newPassword:Joi.string().required()

@@ -3,23 +3,30 @@ const ErrorHandler = require("../../infra/utils/errorHandler");
 const Encryption = require("../../infra/utils/encryption");
 
 async function login({ email, password }) {
-  if (!email || !password) {
+  const users = await user.findOne({ email });
+  if (!users) {
     return ErrorHandler.throwError({
-      message: "please enter valid email and password",
+      message: "please enter valid email",
+      code: 400,
+    });
+  }
+  if (!users.verified) {
+    return ErrorHandler.throwError({
+      message: "verify your email first",
       code: 400,
     });
   }
 
-  const User = await user.findOne({ email }).select("+password");
-  if (!User || !(await User.correctPassword(password, User.password))) {
+  const correctPass = users.comparePassword(password);
+  if (!correctPass) {
     return ErrorHandler.throwError({
-      message: "please enter valid password",
-      code: 404,
+      message: "enter valid password",
+      code: 400,
     });
   }
 
-  const token = Encryption.signToken(User._id);
-  return { token, User };
+  const token = Encryption.signToken(users._id);
+  return { token, users };
 }
 
 module.exports = login;

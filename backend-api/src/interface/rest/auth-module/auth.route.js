@@ -66,15 +66,6 @@ router.route("/forgot").post(
     return ResponseHandler(res, response);
   })
 );
-router.route("/verify").post(
-  AsyncHandler(async (req, res, next) => {
-    const data = await Auth.verifyUserEmail({
-      email: req.body.email,
-      verificationToken: req.body.verificationToken,
-    },req.protocol);
-    res.send(data);
-  })
-);
 router.route("/reset/:Token").patch(
   AsyncHandler(async (req, res, next) => {
     const data = await Auth.resetPassword(req.params.Token, {
